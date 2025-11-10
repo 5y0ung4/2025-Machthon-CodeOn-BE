@@ -17,7 +17,6 @@ public class Sugar {
     @Column(nullable = false, unique = true)
     private String sugarName;
 
-    // InformationPost와 1:1 관계 (InfoPost가 Sugar를 참조)
     @OneToOne(mappedBy = "sugar", fetch = FetchType.LAZY)
     private InformationPost informationPost;
 }
