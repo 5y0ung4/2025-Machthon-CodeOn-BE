@@ -14,12 +14,12 @@ public class Sugar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sugarId;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "sugar_name_kr", nullable = false, unique = true)
     private String sugarNameKR;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "sugar_name_en", nullable = false, unique = true)
     private String sugarNameEN;
 
-    @OneToOne(mappedBy = "sugar", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "sugar")
     private InformationPost informationPost;
 }
