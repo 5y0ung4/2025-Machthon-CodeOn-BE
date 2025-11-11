@@ -7,7 +7,8 @@ import lombok.Getter;
 public class PostResponseDto {
 
     private Long postId;
-    private String sugarName;
+    private String sugarNameKR;
+    private String sugarNameEN;
     private String content;
     private Integer kcal;
     private String bloodSugar;
@@ -16,7 +17,8 @@ public class PostResponseDto {
 
     public PostResponseDto(InformationPost post) {
         this.postId = post.getPostId();
-        this.sugarName = post.getSugar().getSugarName();
+        this.sugarNameKR = post.getSugar().getSugarNameKR();
+        this.sugarNameEN = post.getSugar().getSugarNameEN();
         this.content = post.getContent();
         this.kcal = post.getKcal();
         this.bloodSugar = post.getBloodSugar();

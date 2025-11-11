@@ -15,11 +15,11 @@ public interface InformationPostRepository extends JpaRepository<InformationPost
      // @param end (예: "나")
 
     @Query("SELECT p FROM InformationPost p JOIN FETCH p.sugar s " +
-            "WHERE s.sugarName >= :start AND s.sugarName < :end")
+            "WHERE s.sugarNameKR >= :start AND s.sugarNameKR < :end")
     List<InformationPost> findPostsBySugarNameRange(@Param("start") String start, @Param("end") String end);
 
      //'하'의 경우  <= '힣' 으로 처리
     @Query("SELECT p FROM InformationPost p JOIN FETCH p.sugar s " +
-            "WHERE s.sugarName >= :start AND s.sugarName <= :end")
+            "WHERE s.sugarNameKR >= :start AND s.sugarNameKR <= :end")
     List<InformationPost> findPostsBySugarNameRangeLast(@Param("start") String start, @Param("end") String end);
 }

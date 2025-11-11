@@ -15,7 +15,10 @@ public class Sugar {
     private Long sugarId;
 
     @Column(nullable = false, unique = true)
-    private String sugarName;
+    private String sugarNameKR;
+
+    @Column(nullable = false, unique = true)
+    private String sugarNameEN;
 
     @OneToOne(mappedBy = "sugar", fetch = FetchType.LAZY)
     private InformationPost informationPost;
