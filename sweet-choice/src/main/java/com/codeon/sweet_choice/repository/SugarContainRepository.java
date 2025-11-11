@@ -2,6 +2,7 @@ package com.codeon.sweet_choice.repository;
 
 import com.codeon.sweet_choice.entity.Food;
 import com.codeon.sweet_choice.entity.SugarContain;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -9,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface SugarContainRepository extends CrudRepository<SugarContain, Long> {
+public interface SugarContainRepository extends JpaRepository<SugarContain, Long> {
     List<SugarContain> findByFoodId(Food foodId);
 
     @Query("""
