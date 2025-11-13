@@ -40,3 +40,4 @@ out/
 ### Application settings ###
 .gradle
 application.properties
+data-loader/.env
