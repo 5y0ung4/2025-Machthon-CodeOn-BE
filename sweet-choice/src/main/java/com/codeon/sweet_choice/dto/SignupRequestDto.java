@@ -19,8 +19,8 @@ public class SignupRequestDto {
     // 사용자 상태
     private String userType;
 
-    private float height;
-    private float weight;
+    private Integer height;
+    private Integer weight;
 
     private String sex;
 }
