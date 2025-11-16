@@ -36,9 +36,9 @@ public class User {
     @Column(length = 1)
     private String state;
 
-    private Integer height;
+    private Float height;
 
-    private Integer weight;
+    private Float weight;
 
     @Column(length = 1)
     private String sex;
