@@ -34,7 +34,20 @@ public class UserService {
         }
 
         String encodedPassword = passwordEncoder.encode(signupRequestDto.getPassword());
-        userRepository.save(new User(signupRequestDto.getNickname(), signupRequestDto.getEmail(), encodedPassword, signupRequestDto.getFirstName(), signupRequestDto.getLastName(), LocalDateTime.now()));
+
+        User user = new User();
+        user.setNickname(signupRequestDto.getNickname());
+        user.setEmail(signupRequestDto.getEmail());
+        user.setPassword(encodedPassword);
+        user.setFirstName(signupRequestDto.getFirstName());
+        user.setLastName(signupRequestDto.getLastName());
+        user.setCreatedAt(LocalDateTime.now());
+        user.setState(signupRequestDto.getUserType());
+        user.setHeight(signupRequestDto.getHeight());
+        user.setWeight(signupRequestDto.getWeight());
+        user.setSex(signupRequestDto.getSex());
+        userRepository.save(user);
+
     }
 
     public String login(LoginRequestDto loginRequestDto) {
