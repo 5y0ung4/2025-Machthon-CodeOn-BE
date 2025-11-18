@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class UpdateUserService {
 
     private final UserRepository userRepository;
-    private final CustomUserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     public UpdateUserDto getUserInfo(String email) {
@@ -24,7 +23,8 @@ public class UpdateUserService {
                 user.getNickname(),
                 user.getPassword(),
                 user.getHeight(),
-                user.getWeight()
+                user.getWeight(),
+                user.getState()
         );
     }
 
@@ -44,6 +44,9 @@ public class UpdateUserService {
         if (dto.getWeight() != null) {
             user.setWeight(dto.getWeight());
         }
+        if (dto.getState() != null) {
+            user.setState(dto.getState());
+        }
 
         userRepository.save(user);
 
@@ -51,7 +54,8 @@ public class UpdateUserService {
                 user.getNickname(),
                 user.getPassword(),
                 user.getHeight(),
-                user.getWeight()
+                user.getWeight(),
+                user.getState()
         );
     }
 
