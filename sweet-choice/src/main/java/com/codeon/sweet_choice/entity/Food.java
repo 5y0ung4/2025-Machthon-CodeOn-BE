@@ -14,7 +14,7 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long foodId;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 255)
     private String foodName;
 
     @Column(nullable = false, length = 10)

@@ -1,9 +1,13 @@
 package com.codeon.sweet_choice.service;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
 
 import java.net.http.HttpHeaders;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class GeminiService {
@@ -27,15 +31,27 @@ public class GeminiService {
         }
         """.formatted(prompt);
 
-        return webClient.post()
-                .url(urlBuilder -> urlBuilder
-                        .path("/models/gemini-2.0-flash:generateContent")
+        Map<String, Object> response = webClient.post()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/models/gemini-2.0-flash")
+                        .path(":generateContent")
                         .queryParam("key", apiKey)
                         .build())
-                .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(body)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(Map.class)
                 .block();
+
+        List<Map<String, Object>> candidates =
+                (List<Map<String, Object>>) response.get("candidates");
+
+        if(candidates == null || candidates.isEmpty()) return "";
+
+        Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
+
+        List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
+
+        return (String) parts.get(0).get("text");
     }
 }

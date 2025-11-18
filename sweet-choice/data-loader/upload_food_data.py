@@ -75,6 +75,8 @@ with engine.begin() as conn:
 # 기존 테이블 초기화
     conn.execute(text("DROP TABLE IF EXISTS sugar_contain;"))
     #conn.execute(text("DROP TABLE IF EXISTS sugar;"))
+    conn.execute(text("DROP TABLE IF EXISTS history;"))
+    conn.execute(text("DROP TABLE IF EXISTS analyze_report;"))
     conn.execute(text("DROP TABLE IF EXISTS food;"))
 
     conn.execute(text("""

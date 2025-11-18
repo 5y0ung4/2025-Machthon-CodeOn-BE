@@ -1,5 +1,6 @@
 package com.codeon.sweet_choice.service;
 
+import com.codeon.sweet_choice.config.CustomUserDetails;
 import com.codeon.sweet_choice.entity.User;
 import com.codeon.sweet_choice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +17,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // email로 사용자 검색
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + email));
 
-        // User 객체 → 스프링 시큐리티 UserDetails로 변환
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .roles("USER")  // 권한 부여
-                .build();
+        return new CustomUserDetails(user);
     }
+
 }
