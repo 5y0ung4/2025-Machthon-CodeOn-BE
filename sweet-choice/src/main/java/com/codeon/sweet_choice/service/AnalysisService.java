@@ -4,6 +4,7 @@ import com.codeon.sweet_choice.dto.AnalysisResponseDto;
 import com.codeon.sweet_choice.dto.FoodDetailDto;
 import com.codeon.sweet_choice.entity.*;
 import com.codeon.sweet_choice.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +94,7 @@ public class AnalysisService {
 
     }
 
+    @Transactional
     public void scrapReport(Long userId, Long reportId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));

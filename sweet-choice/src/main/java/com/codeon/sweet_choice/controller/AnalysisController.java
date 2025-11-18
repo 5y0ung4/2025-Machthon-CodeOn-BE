@@ -24,7 +24,7 @@ public class AnalysisController {
     }
 
     @PatchMapping("/scrap")
-    public void scrapReport(@AuthenticationPrincipal CustomUserDetails userDetails, Long reportId){
+    public void scrapReport(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody Long reportId){
         Long userId = userDetails.getUserId();
         analysisService.scrapReport(userId, reportId);
     }
