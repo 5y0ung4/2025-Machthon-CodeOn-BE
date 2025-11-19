@@ -1,6 +1,7 @@
 package com.codeon.sweet_choice.controller;
 
 import com.codeon.sweet_choice.dto.UpdateUserDto;
+import com.codeon.sweet_choice.entity.User;
 import com.codeon.sweet_choice.service.UpdateUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,48 +21,21 @@ public class UpdateUserController {
     @Autowired
     private final UpdateUserService updateUserService;
 
-    @GetMapping("/getUser")
-    public ResponseEntity<UpdateUserDto> getUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    @GetMapping("/{userId}")
+    public ResponseEntity<UpdateUserDto> getUserInfo(@PathVariable Long userId) {
+        UpdateUserDto userInfo = updateUserService.getUserInfo(userId);
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
-
-        Object principal = authentication.getPrincipal();
-        String email;
-
-        if (principal instanceof UserDetails userDetails) {
-            email = userDetails.getUsername();
-        } else {
-            email = principal.toString();
-        }
-
-        UpdateUserDto userInfo = updateUserService.getUserInfo(email);
         return ResponseEntity.ok(userInfo);
     }
 
 
-    @PatchMapping("/updateUser")
+    @PatchMapping("/{userId}")
     public ResponseEntity<UpdateUserDto> updateMyProfile(
+            @PathVariable Long userId,
             @Valid @RequestBody UpdateUserDto request
     ) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UpdateUserDto updatedInfo = updateUserService.updateUserInfo(userId, request);
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).build();
-        }
-
-        Object principal = authentication.getPrincipal();
-        String userEmail;
-
-        if (principal instanceof UserDetails userDetails) {
-            userEmail = userDetails.getUsername();
-        } else {
-            userEmail = principal.toString();
-        }
-
-        UpdateUserDto updatedInfo = updateUserService.updateUserInfo(userEmail, request);
         return ResponseEntity.ok(updatedInfo);
     }
 
