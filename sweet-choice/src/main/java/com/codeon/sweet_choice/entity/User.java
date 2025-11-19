@@ -43,6 +43,9 @@ public class User {
     @Column(length = 1)
     private String sex;
 
+    @Column(nullable = true)
+    private Integer adi;
+
     public User(String nickname, String email, String password, String firstName, String lastName, LocalDateTime createdAt) {
         this.nickname = nickname;
         this.email = email;

@@ -24,20 +24,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException{
+                                    FilterChain filterChain) throws ServletException, IOException {
+
         String token = resolveToken(request);
 
         if (token != null && jwtTokenProvider.validateJwtToken(token)) {
             String email = jwtTokenProvider.getEmailFromJwtToken(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            // CustomUserDetails로 가져옴
+            CustomUserDetails userDetails =
+                    (CustomUserDetails) userDetailsService.loadUserByUsername(email);
+
+            // 인증 객체 생성
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+
+            // SecurityContextHolder에 저장 → @AuthenticationPrincipal 작동
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         filterChain.doFilter(request, response);
-
-
     }
+
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
@@ -46,4 +58,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+
 }

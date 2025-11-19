@@ -1,12 +1,15 @@
 package com.codeon.sweet_choice.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "sugar")
 public class Sugar {
 

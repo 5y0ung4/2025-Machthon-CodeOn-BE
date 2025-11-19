@@ -47,6 +47,7 @@ INSERT INTO information_post (sugar_id, content, kcal, blood_sugar, sweet, chara
 
 -- Quiz 테이블 초기화
 TRUNCATE TABLE quiz;
+
 -- 초기 데이터 삽입 (quiz_id는 AUTO_INCREMENT에 맡김)
 INSERT INTO quiz (question, answer, explanation) VALUES
 ('식품첨가물은 몸에 축적된다.', false,

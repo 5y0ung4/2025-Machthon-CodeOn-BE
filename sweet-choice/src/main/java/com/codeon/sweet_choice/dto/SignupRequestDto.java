@@ -15,4 +15,12 @@ public class SignupRequestDto {
 
     private String firstName;
     private String lastName;
+
+    // 사용자 상태
+    private String userType;
+
+    private Integer height;
+    private Integer weight;
+
+    private String sex;
 }

@@ -13,7 +13,7 @@ import java.util.Date;
 public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
-    private final long EXPIRATION_TIME = 3600;
+    private final long EXPIRATION_TIME = 3600 * 1000L; //토큰유지 1시간
 
     public String generateJwtToken(String email) {
         Date now = new Date();
@@ -25,7 +25,7 @@ public class JwtTokenProvider {
                 .setExpiration(expirationDate)
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
-        return "JWT Token: " + token;
+        return token;
     }
 
     public String getEmailFromJwtToken(String token) {
