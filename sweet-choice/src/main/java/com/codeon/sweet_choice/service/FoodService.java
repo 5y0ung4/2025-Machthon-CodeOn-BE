@@ -83,7 +83,7 @@ public class FoodService {
                 .recordId(saved.getRecordId())
                 .foodName(food.getFoodName())
                 .count(saved.getRecordCount())
-                .calcSugar(food.getTotalSugar() * saved.getRecordCount())
+                .calcSugar((double) (food.getTotalSugar() * saved.getRecordCount()))
                 .recordDate(saved.getRecordDate())
                 .build();
     }

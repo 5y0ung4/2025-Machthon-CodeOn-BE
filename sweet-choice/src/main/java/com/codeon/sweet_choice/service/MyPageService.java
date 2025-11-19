@@ -72,15 +72,12 @@ public class MyPageService {
             totalConsumed += calcTotal;
 
             // 내부 레코드 리스트 생성
-            List<SugarRecordResponseDto.Detail> details = getSugarDetails(food, count);
-
+            List<DailyRecordResponseDto.Detail> details = getSugarDetails(food, count);
             recordDtos.add(SugarRecordResponseDto.builder()
-                    .recordId(record.getRecordId())
-                    .foodName(food.getFoodName())
-                    .count(count)
-                    .calcSugar(calcTotal)
-                    .recordDate(record.getRecordDate())
-                    .details(details) // 주입
+                    .recordDate(record.getRecordDate()) // 날짜 넣기
+                    .details(details)                   // 상세정보 넣기
+                    // .foodName(...) -> 안 넣음 (Null -> 숨겨짐)
+                    // .calcSugar(...) -> 안 넣음 (Null -> 숨겨짐)
                     .build());
         }
 
@@ -104,17 +101,17 @@ public class MyPageService {
     }
 
     // [Helper 메서드] 상세 당 정보 생성기
-    private List<SugarRecordResponseDto.Detail> getSugarDetails(Food food, int count) {
-        List<SugarContain> contains = sugarContainRepository.findByFoodId(food); // Repository 메서드명 확인 필요
-        List<SugarRecordResponseDto.Detail> details = new ArrayList<>();
+    private List<DailyRecordResponseDto.Detail> getSugarDetails(Food food, int count) {
+        List<SugarContain> contains = sugarContainRepository.findByFoodId(food);
+        List<DailyRecordResponseDto.Detail> details = new ArrayList<>();
 
         for (SugarContain sc : contains) {
             double rawAmount = sc.getGram() * count;
             double roundedAmount = Math.round(rawAmount * 100.0) / 100.0;
 
-            // 내부 레코드(Detail) 생성 (new DTO 방식보다 훨씬 간결)
-            details.add(new SugarRecordResponseDto.Detail(
-                    sc.getSugarId().getSugarNameKR(),
+            // record의 변수명이 sugarNameKR 이므로 순서에 맞춰 주입
+            details.add(new DailyRecordResponseDto.Detail(
+                    sc.getSugarId().getSugarNameKR(), // 한글 이름
                     roundedAmount
             ));
         }
