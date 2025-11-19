@@ -22,4 +22,5 @@ public interface SugarContainRepository extends JpaRepository<SugarContain, Long
 """)
     List<Food> findFoodsBySugarName(@Param("sugarName") String sugarName);
 
+    List<SugarContain> findAllByFoodId(Food foodId);
 }
