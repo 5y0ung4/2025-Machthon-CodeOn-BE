@@ -46,15 +46,14 @@ public class User {
     @Column(nullable = true)
     private Integer adi;
 
-    public User(String nickname, String email, String password, String firstName, String lastName, LocalDateTime createdAt) {
+    public User(String nickname, String email, String password, String firstName, String lastName, LocalDateTime createdAt, Integer adi) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.createdAt = createdAt;
+        this.adi = adi;
     }
-
-
 
 }

@@ -10,13 +10,15 @@ public class UpdateUserDto {
     private String password;
     private Integer height;
     private Integer weight;
-    private String state;
+    private String userType;
+    private Integer adi;
 
-    public UpdateUserDto(String nickname, String password, Integer height, Integer weight, String state) {
+    public UpdateUserDto(String nickname, String password, Integer height, Integer weight, String userType, Integer adi) {
         this.nickname = nickname;
         this.password = password;
         this.height = height;
         this.weight = weight;
-        this.state = state;
+        this.userType = userType;
+        this.adi = adi;
     }
 }
