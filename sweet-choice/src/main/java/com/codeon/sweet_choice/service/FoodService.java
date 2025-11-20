@@ -45,6 +45,17 @@ public class FoodService {
                 .toList();
     }
 
+    // 음식 분류로 음식 리스트 조회
+    public List<FoodListDto> getFoodListByCategory(String search) {
+        List<FoodListDto> foodListDtos = new ArrayList<>();
+        List<Food> foodList = foodRepository.findByFoodCategoryName(search);
+        for (Food food : foodList) {
+            FoodListDto foodDto = new FoodListDto(food.getFoodId(), food.getFoodName());
+            foodListDtos.add(foodDto);
+        }
+        return foodListDtos;
+    }
+
     // 음식 아이디로 음식 정보 상세 조회
     public FoodDetailDto getFoodDetailByFoodId(Long foodId) {
         Food food = foodRepository.findByFoodId(foodId);

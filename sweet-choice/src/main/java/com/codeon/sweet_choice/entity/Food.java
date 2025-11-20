@@ -17,6 +17,9 @@ public class Food {
     @Column(nullable = false, unique = true, length = 255)
     private String foodName;
 
+    @Column(nullable = false, length = 100)
+    private String foodCategoryName;
+
     @Column(nullable = false, length = 10)
     private float kcal;
 
