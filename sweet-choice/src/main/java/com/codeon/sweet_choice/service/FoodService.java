@@ -34,7 +34,7 @@ public class FoodService {
         return foodListDtos;
     }
 
-    //검색어를 포함하는 음식 전체 조회(당 종류로 검색)
+    // 검색어를 포함하는 음식 전체 조회(당 종류로 검색)
     public List<FoodListDto> getFoodListBySugar(String search) {
         return sugarContainRepository.findFoodsBySugarName(search)
                 .stream()
@@ -42,6 +42,7 @@ public class FoodService {
                 .toList();
     }
 
+    // 음식 아이디로 음식 정보 상세 조회
     public FoodDetailDto getFoodDetailByFoodId(Long foodId) {
         Food food = foodRepository.findByFoodId(foodId);
         List<SugarContain> sugarContains = sugarContainRepository.findByFoodId(food);
