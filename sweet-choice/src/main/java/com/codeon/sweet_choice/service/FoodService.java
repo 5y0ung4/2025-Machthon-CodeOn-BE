@@ -2,18 +2,19 @@ package com.codeon.sweet_choice.service;
 
 import com.codeon.sweet_choice.dto.FoodDetailDto;
 import com.codeon.sweet_choice.dto.FoodListDto;
-import com.codeon.sweet_choice.entity.Food;
-import com.codeon.sweet_choice.entity.SugarContain;
+import com.codeon.sweet_choice.dto.SugarRecordResponseDto;
+import com.codeon.sweet_choice.entity.*;
 import com.codeon.sweet_choice.repository.FoodRepository;
 import com.codeon.sweet_choice.repository.SugarContainRepository;
+import com.codeon.sweet_choice.repository.SugarRecordRepository;
 import com.codeon.sweet_choice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,8 @@ public class FoodService {
 
     private final FoodRepository foodRepository;
     private final SugarContainRepository sugarContainRepository;
+    private final UserRepository userRepository;
+    private final SugarRecordRepository sugarRecordRepository;
 
     // 검색어를 포함하는 음식 전체 조회(음식 이름으로 검색)
     public List<FoodListDto> getFoodListByFoodName(String search) {
@@ -34,7 +37,7 @@ public class FoodService {
         return foodListDtos;
     }
 
-    //검색어를 포함하는 음식 전체 조회(당 종류로 검색)
+    // 검색어를 포함하는 음식 전체 조회(당 종류로 검색)
     public List<FoodListDto> getFoodListBySugar(String search) {
         return sugarContainRepository.findFoodsBySugarName(search)
                 .stream()
@@ -42,6 +45,7 @@ public class FoodService {
                 .toList();
     }
 
+    // 음식 아이디로 음식 정보 상세 조회
     public FoodDetailDto getFoodDetailByFoodId(Long foodId) {
         Food food = foodRepository.findByFoodId(foodId);
         List<SugarContain> sugarContains = sugarContainRepository.findByFoodId(food);
@@ -58,4 +62,43 @@ public class FoodService {
 
         return dto;
     }
+
+    //섭취 음식 저장
+    public SugarRecordResponseDto saveFoodRecord(Long userId, Long foodId, int count) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new IllegalArgumentException("음식 없음"));
+
+        SugarRecord sugarRecord = SugarRecord.builder()
+                .user(user)
+                .food(food)
+                .recordCount(count)
+                .recordDate(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        SugarRecord saved = sugarRecordRepository.save(sugarRecord);
+
+        return SugarRecordResponseDto.builder()
+                .recordId(saved.getRecordId())
+                .foodName(food.getFoodName())
+                .count(saved.getRecordCount())
+                .calcSugar((double) (food.getTotalSugar() * saved.getRecordCount()))
+                .recordDate(saved.getRecordDate())
+                .build();
+    }
+
+    // 섭취 기록 삭제
+    public void deleteFoodRecord(Long userId, Long recordId) {
+        SugarRecord record = sugarRecordRepository.findById(recordId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 기록이 존재하지 않습니다."));
+
+        if (!record.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("본인의 섭취 기록만 삭제할 수 있습니다.");
+        }
+
+        sugarRecordRepository.delete(record);
+    }
+
 }

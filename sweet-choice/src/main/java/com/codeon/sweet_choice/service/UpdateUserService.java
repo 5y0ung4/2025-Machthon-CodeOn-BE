@@ -5,7 +5,6 @@ import com.codeon.sweet_choice.entity.User;
 import com.codeon.sweet_choice.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,40 +12,33 @@ import org.springframework.stereotype.Service;
 public class UpdateUserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
-    public UpdateUserDto getUserInfo(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
+    public UpdateUserDto getUserInfo(Long userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("사용자 정보가 없습니다."));
 
         return new UpdateUserDto(
                 user.getNickname(),
                 user.getPassword(),
                 user.getHeight(),
                 user.getWeight(),
-                user.getState()
+                user.getState(),
+                user.getAdi()
         );
     }
 
-    public UpdateUserDto updateUserInfo(String email, UpdateUserDto dto) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User not found: " + email));
+    public UpdateUserDto updateUserInfo(Long userId, UpdateUserDto updateUserDto) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("사용자가 없습니다."));
 
-        if (dto.getNickname() != null && !dto.getNickname().isBlank()) {
-            user.setNickname(dto.getNickname());
-        }
-        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        }
-        if (dto.getHeight() != null) {
-            user.setHeight(dto.getHeight());
-        }
-        if (dto.getWeight() != null) {
-            user.setWeight(dto.getWeight());
-        }
-        if (dto.getState() != null) {
-            user.setState(dto.getState());
-        }
+        if (updateUserDto.getNickname() != null) user.setNickname(updateUserDto.getNickname());
+        if (updateUserDto.getHeight() != null) user.setHeight(updateUserDto.getHeight());
+        if (updateUserDto.getWeight() != null) user.setWeight(updateUserDto.getWeight());
+        if (updateUserDto.getUserType() != null) user.setState(updateUserDto.getUserType());
+
+        int newAdi = userService.calculateAdiValue(user);
+        user.setAdi(newAdi);
 
         userRepository.save(user);
 
@@ -55,7 +47,8 @@ public class UpdateUserService {
                 user.getPassword(),
                 user.getHeight(),
                 user.getWeight(),
-                user.getState()
+                user.getState(),
+                newAdi
         );
     }
 
