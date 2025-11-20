@@ -95,7 +95,7 @@ public class AnalysisService {
     }
 
     @Transactional
-    public void scrapReport(Long userId, Long reportId){
+    public String scrapReport(Long userId, Long reportId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
@@ -107,13 +107,15 @@ public class AnalysisService {
         boolean alreadyScrapped = historyRepository.existsByUserIdAndReportId(user, report);
         if (alreadyScrapped) {
             historyRepository.deleteByUserIdAndReportId(user, report);
+            return "스크랩 취소";
+
         }else{
             History history = new History();
             history.setUserId(user);
             history.setReportId(report);
 
             historyRepository.save(history);
-
+            return "스크랩 완료";
         }
     }
 }
