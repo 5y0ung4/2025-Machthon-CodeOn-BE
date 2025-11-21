@@ -1,5 +1,6 @@
 package com.codeon.sweet_choice.controller;
 
+import com.codeon.sweet_choice.config.CustomUserDetails;
 import com.codeon.sweet_choice.dto.FoodDetailDto;
 import com.codeon.sweet_choice.dto.FoodListDto;
 import com.codeon.sweet_choice.dto.FoodRecordRequestDto;
@@ -8,6 +9,7 @@ import com.codeon.sweet_choice.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,9 +51,10 @@ public class FoodController {
 
     //섭취 기록 저장
     @PostMapping("/record")
-    public ResponseEntity<SugarRecordResponseDto> saveFoodRecord(@RequestBody FoodRecordRequestDto request) {
+    public ResponseEntity<SugarRecordResponseDto> saveFoodRecord(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody FoodRecordRequestDto request) {
+        Long userId = userDetails.getUserId();
         SugarRecordResponseDto response = foodService.saveFoodRecord(
-                request.getUserId(),
+                userId,
                 request.getFoodId(),
                 request.getCount()
         );

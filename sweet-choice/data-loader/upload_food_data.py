@@ -331,6 +331,8 @@ for col in df.columns[2:]:
     df[col] = df[col].fillna(0)
     df[col] = df[col].astype(float)
 
+df['food_category_name'] = df['food_category_name'].astype(str).str.replace(" ", "")
+
 #food 테이블 삽입용 데이터 추출
 df1 = df[['food_name', 'food_category_name', 'kcal', 'carbohydrate', 'protein', 'fat', 'total_sugar']]
 
@@ -347,6 +349,8 @@ with engine.begin() as conn:
 # 기존 테이블 초기화
     conn.execute(text("DROP TABLE IF EXISTS sugar_contain;"))
     #conn.execute(text("DROP TABLE IF EXISTS sugar;"))
+    conn.execute(text("DROP TABLE IF EXISTS sugar_record;"))
+    conn.execute(text("DROP TABLE IF EXISTS information_post"))
     conn.execute(text("DROP TABLE IF EXISTS history;"))
     conn.execute(text("DROP TABLE IF EXISTS analyze_report;"))
     conn.execute(text("DROP TABLE IF EXISTS food;"))

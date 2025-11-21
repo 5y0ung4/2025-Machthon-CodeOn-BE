@@ -42,11 +42,13 @@ public class MyPageController {
     //캘린더 당 기록 보기
     @GetMapping("/record")
     public ResponseEntity<DailyRecordResponseDto> getDailyRecord(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
     ) {
+        Long userId = userDetails.getUserId();
         // 날짜 파라미터가 없으면 오늘 날짜로 설정
         if (date == null) {
+
             date = LocalDate.now();
         }
 
@@ -59,8 +61,9 @@ public class MyPageController {
     @DeleteMapping("/record/{recordId}")
     public ResponseEntity<String> deleteFoodRecord(
             @PathVariable Long recordId,
-            @RequestParam Long userId
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        Long userId = userDetails.getUserId();
         foodService.deleteFoodRecord(userId, recordId);
         return ResponseEntity.ok("섭취 기록이 성공적으로 삭제되었습니다.");
     }

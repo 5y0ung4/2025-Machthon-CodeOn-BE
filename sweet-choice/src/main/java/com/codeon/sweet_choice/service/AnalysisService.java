@@ -77,6 +77,7 @@ public class AnalysisService {
 
         if (analyzeReport != null) {
             return new AnalysisResponseDto(
+                    food.getFoodName(),
                     food.getFoodId(),
                     analyzeReport.getReportId(),
                     analyzeReport.getContent()
@@ -90,7 +91,7 @@ public class AnalysisService {
 
         analysisRepository.save(analyzeReport);
 
-        return new AnalysisResponseDto(food.getFoodId(), analyzeReport.getReportId(), report);
+        return new AnalysisResponseDto(food.getFoodName(), food.getFoodId(), analyzeReport.getReportId(), report);
 
     }
 

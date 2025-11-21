@@ -39,6 +39,7 @@ public class MyPageService {
             Food food  = report.getFoodId();
 
             return new AnalysisResponseDto(
+                    food.getFoodCategoryName(),
                     report.getReportId(),
                     food.getFoodId(),
                     report.getContent()

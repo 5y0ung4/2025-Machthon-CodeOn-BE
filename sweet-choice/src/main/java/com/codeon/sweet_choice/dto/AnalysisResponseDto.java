@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter @Setter
 @AllArgsConstructor
 public class AnalysisResponseDto {
+    private String foodName;
     private Long foodId;
     private Long reportId;
     private String content;

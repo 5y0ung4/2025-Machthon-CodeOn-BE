@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class FoodRecordRequestDto {
-    private Long userId;
     private Long foodId;
     private int count; // 섭취 횟수 (default 1)
 }
