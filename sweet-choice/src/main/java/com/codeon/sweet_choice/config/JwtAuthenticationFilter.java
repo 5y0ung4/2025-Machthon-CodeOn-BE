@@ -26,16 +26,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        // 1) 인증이 필요없는 엔드포인트는 필터 건너뛰기
+        if (path.startsWith("/api/auth") ||
+                path.startsWith("/h2-console")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 인증이 필요한 경우 JWT 검증
         String token = resolveToken(request);
 
         if (token != null && jwtTokenProvider.validateJwtToken(token)) {
             String email = jwtTokenProvider.getEmailFromJwtToken(token);
 
-            // CustomUserDetails로 가져옴
             CustomUserDetails userDetails =
                     (CustomUserDetails) userDetailsService.loadUserByUsername(email);
 
-            // 인증 객체 생성
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -43,7 +52,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails.getAuthorities()
                     );
 
-            // SecurityContextHolder에 저장 → @AuthenticationPrincipal 작동
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
@@ -51,13 +59,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 
+
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
+        System.out.println("[AUTH HEADER RAW] " + bearerToken);
+
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+            String token = bearerToken.substring(7);
+            System.out.println("[TOKEN ONLY] " + token);
+            return token;
         }
         return null;
     }
+
+
 
 
 }

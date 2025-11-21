@@ -38,11 +38,34 @@ public class JwtTokenProvider {
     }
 
     public boolean validateJwtToken(String token) {
-        try{
-            Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes()).build().parseClaimsJws(token);
+        try {
+            System.out.println("[VALIDATE TOKEN] " + token);
+
+            // 실제 검증
+            Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY.getBytes())
+                    .build()
+                    .parseClaimsJws(token);
+
+            System.out.println("[JWT VALID] Token is valid.");
             return true;
-        }catch(Exception e){
-            return false;
+
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            System.out.println("[JWT ERROR] Token expired: " + e.getMessage());
+        } catch (io.jsonwebtoken.SignatureException e) {
+            System.out.println("[JWT ERROR] Invalid signature: " + e.getMessage());
+        } catch (io.jsonwebtoken.MalformedJwtException e) {
+            System.out.println("[JWT ERROR] Malformed token: " + e.getMessage());
+        } catch (io.jsonwebtoken.UnsupportedJwtException e) {
+            System.out.println("[JWT ERROR] Unsupported token: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("[JWT ERROR] Empty or null token: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("[JWT ERROR] Unknown error: " + e.getMessage());
         }
+
+        System.out.println("[JWT INVALID] Token validation failed.");
+        return false;
     }
+
 }

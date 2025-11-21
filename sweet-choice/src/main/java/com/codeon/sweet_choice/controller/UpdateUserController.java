@@ -1,15 +1,17 @@
 package com.codeon.sweet_choice.controller;
 
+import com.codeon.sweet_choice.config.CustomUserDetails;
 import com.codeon.sweet_choice.dto.UpdateUserDto;
 import com.codeon.sweet_choice.service.UpdateUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/mypage/info")
 public class UpdateUserController {
@@ -17,19 +19,21 @@ public class UpdateUserController {
     @Autowired
     private final UpdateUserService updateUserService;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UpdateUserDto> getUserInfo(@PathVariable Long userId) {
+    @GetMapping("/getUser")
+    public ResponseEntity<UpdateUserDto> getUserInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getUserId();
         UpdateUserDto userInfo = updateUserService.getUserInfo(userId);
 
         return ResponseEntity.ok(userInfo);
     }
 
 
-    @PatchMapping("/{userId}")
+    @PatchMapping("/updateUser")
     public ResponseEntity<UpdateUserDto> updateMyProfile(
-            @PathVariable Long userId,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody UpdateUserDto request
     ) {
+        Long userId = userDetails.getUserId();
         UpdateUserDto updatedInfo = updateUserService.updateUserInfo(userId, request);
 
         return ResponseEntity.ok(updatedInfo);
