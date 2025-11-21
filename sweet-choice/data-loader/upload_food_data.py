@@ -327,7 +327,7 @@ df = df[['food_name','food_category_name', 'kcal', 'carbohydrate', 'protein', 'f
          'glucose', 'fructose', 'galactose', 'sucrose', 'lactose', 'maltose', 'sugar_alcohol',
          'allulose', 'erythritol', 'tagatose']]
 
-for col in df.columns[1:]:
+for col in df.columns[2:]:
     df[col] = df[col].fillna(0)
     df[col] = df[col].astype(float)
 

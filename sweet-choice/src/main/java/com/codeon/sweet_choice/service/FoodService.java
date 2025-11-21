@@ -63,6 +63,7 @@ public class FoodService {
 
         FoodDetailDto dto = new FoodDetailDto();
         dto.setFoodId(food.getFoodId());
+        dto.setFoodCategoryName(food.getFoodCategoryName());
         dto.setFoodName(food.getFoodName());
         dto.setKcal(food.getKcal());
         dto.setCarbohydrate(food.getCarbohydrate());

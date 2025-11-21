@@ -20,24 +20,32 @@ public class FoodController {
 
     //음식 이름으로 검색
     @GetMapping("/search/food")
-    public ResponseEntity<List<FoodListDto>> getFoodListByFoodId(String search) {
+    public ResponseEntity<List<FoodListDto>> getFoodListByFoodId(@RequestParam String search) {
         List<FoodListDto> foodListDto = foodService.getFoodListByFoodName(search);
         return new ResponseEntity<>(foodListDto, HttpStatus.OK) ;
     }
 
     //당 종류로 검색
     @GetMapping("/search/sugar")
-    public ResponseEntity<List<FoodListDto>> getFoodListBySugar(String search) {
+    public ResponseEntity<List<FoodListDto>> getFoodListBySugar(@RequestParam String search) {
         List<FoodListDto> foodListDto = foodService.getFoodListBySugar(search);
         return new ResponseEntity<>(foodListDto, HttpStatus.OK) ;
     }
 
     //음식 상세정보 조회
     @GetMapping("/search/detail")
-    public ResponseEntity<FoodDetailDto> getFoodDetailByFoodId(Long foodId) {
+    public ResponseEntity<FoodDetailDto> getFoodDetailByFoodId(@RequestParam Long foodId) {
         FoodDetailDto dto = foodService.getFoodDetailByFoodId(foodId);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+    // 음식 분류명으로 리스트 조회
+    @GetMapping("/search/category")
+    public ResponseEntity<List<FoodListDto>> getFoodListByCategory(@RequestParam String search) {
+        List<FoodListDto> foodListDto = foodService.getFoodListByCategory(search);
+        return new ResponseEntity<>(foodListDto, HttpStatus.OK);
+    }
+
 
     //섭취 기록 저장
     @PostMapping("/record")
