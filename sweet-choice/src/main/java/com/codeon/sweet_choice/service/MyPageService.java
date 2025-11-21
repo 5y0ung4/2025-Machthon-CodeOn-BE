@@ -105,6 +105,12 @@ public class MyPageService {
         List<SugarContain> contains = sugarContainRepository.findByFoodId(food);
         List<DailyRecordResponseDto.Detail> details = new ArrayList<>();
 
+        if(contains.isEmpty()){
+            double totalSugar = food.getTotalSugar() * count;
+            details.add(new DailyRecordResponseDto.Detail(
+                    "섭취한 음식의 당 종류 정보가 없어 총 당만 표시됩니다.", totalSugar));
+        }
+
         for (SugarContain sc : contains) {
             double rawAmount = sc.getGram() * count;
             double roundedAmount = Math.round(rawAmount * 100.0) / 100.0;
