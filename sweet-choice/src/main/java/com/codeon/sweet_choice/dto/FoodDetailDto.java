@@ -10,6 +10,7 @@ import java.util.List;
 @Getter @Setter
 public class FoodDetailDto {
     private Long foodId;
+    private String foodCategoryName;
     private String foodName;
     private double kcal;
     private double carbohydrate;
