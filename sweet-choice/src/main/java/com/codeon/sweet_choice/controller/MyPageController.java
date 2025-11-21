@@ -1,13 +1,16 @@
 package com.codeon.sweet_choice.controller;
 
+import com.codeon.sweet_choice.config.CustomUserDetails;
 import com.codeon.sweet_choice.dto.AnalysisResponseDto;
 import com.codeon.sweet_choice.dto.DailyRecordResponseDto;
+import com.codeon.sweet_choice.dto.RecordAllDto;
 import com.codeon.sweet_choice.service.FoodService;
 import com.codeon.sweet_choice.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -23,9 +26,10 @@ public class MyPageController {
     private final FoodService foodService;
 
     //음식에 대한 리포트 보기
-    @GetMapping("/history/{userId}")
+    @GetMapping("/history")
     public ResponseEntity<?> getAllHistory(
-            @PathVariable("userId") Long userId){
+            @AuthenticationPrincipal CustomUserDetails userDetails){
+        Long userId = userDetails.getUserId();
         try {
             List<AnalysisResponseDto> historyDto = myPageService.getAnalysisHistory(userId);
             return ResponseEntity.ok(historyDto);
@@ -59,5 +63,13 @@ public class MyPageController {
     ) {
         foodService.deleteFoodRecord(userId, recordId);
         return ResponseEntity.ok("섭취 기록이 성공적으로 삭제되었습니다.");
+    }
+
+    // 기록한 음식 전체 보기
+    @GetMapping("/record/food")
+    public ResponseEntity<List<RecordAllDto>> getFoodRecord(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getUserId();
+        List<RecordAllDto> recordAllDtos = myPageService.getFoodRecord(userId);
+        return ResponseEntity.ok(recordAllDtos);
     }
 }

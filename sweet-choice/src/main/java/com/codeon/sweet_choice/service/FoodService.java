@@ -1,13 +1,8 @@
 package com.codeon.sweet_choice.service;
 
-import com.codeon.sweet_choice.dto.FoodDetailDto;
-import com.codeon.sweet_choice.dto.FoodListDto;
-import com.codeon.sweet_choice.dto.SugarRecordResponseDto;
+import com.codeon.sweet_choice.dto.*;
 import com.codeon.sweet_choice.entity.*;
-import com.codeon.sweet_choice.repository.FoodRepository;
-import com.codeon.sweet_choice.repository.SugarContainRepository;
-import com.codeon.sweet_choice.repository.SugarRecordRepository;
-import com.codeon.sweet_choice.repository.UserRepository;
+import com.codeon.sweet_choice.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -100,6 +95,8 @@ public class FoodService {
                 .recordDate(saved.getRecordDate())
                 .build();
     }
+
+
 
     // 섭취 기록 삭제
     public void deleteFoodRecord(Long userId, Long recordId) {

@@ -9,4 +9,8 @@ import java.util.List;
 
 public interface SugarRecordRepository extends JpaRepository<SugarRecord,Long> {
     List<SugarRecord> findAllByUserAndRecordDateBetween(User user, LocalDateTime start, LocalDateTime end);
+
+    List<SugarRecord> findAllByUser(User user);
+
+    List<SugarRecord> findAllByUserOrderByCreatedAtDesc(User user);
 }

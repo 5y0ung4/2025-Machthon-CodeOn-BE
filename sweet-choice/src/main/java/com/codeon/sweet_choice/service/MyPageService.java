@@ -1,8 +1,6 @@
 package com.codeon.sweet_choice.service;
 
-import com.codeon.sweet_choice.dto.AnalysisResponseDto;
-import com.codeon.sweet_choice.dto.DailyRecordResponseDto;
-import com.codeon.sweet_choice.dto.SugarRecordResponseDto;
+import com.codeon.sweet_choice.dto.*;
 import com.codeon.sweet_choice.entity.*;
 import com.codeon.sweet_choice.repository.HistoryRepository;
 import com.codeon.sweet_choice.repository.SugarContainRepository;
@@ -122,6 +120,43 @@ public class MyPageService {
             ));
         }
         return details;
+    }
+
+    public List<RecordAllDto> getFoodRecord(Long userId){
+        User user = userRepository.findByUserId(userId).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+        List<SugarRecord> sugarRecords = sugarRecordRepository.findAllByUserOrderByCreatedAtDesc(user);
+        List<RecordAllDto> recordAllDtos = new ArrayList<>();
+        for(SugarRecord sugarRecord : sugarRecords){
+            RecordAllDto recordAllDto = new RecordAllDto();
+            Integer recordCount = sugarRecord.getRecordCount();
+            Food food = sugarRecord.getFood();
+            recordAllDto.setRecordCount(sugarRecord.getRecordCount());
+            recordAllDto.setRecordDate(sugarRecord.getRecordDate());
+            recordAllDto.setFoodName(food.getFoodName());
+            recordAllDto.setFoodCategoryName(food.getFoodCategoryName());
+            recordAllDto.setTotalCarbohydrate(food.getCarbohydrate() * recordCount);
+            recordAllDto.setTotalKcal(food.getKcal() * recordCount);
+            recordAllDto.setTotalFat(food.getFat() * recordCount);
+            recordAllDto.setTotalProtein(food.getProtein() * recordCount);
+            recordAllDto.setTotalSugar(food.getTotalSugar() * recordCount);
+            List<SugarContain> sugarContains = sugarContainRepository.findAllByFoodId(food);
+            List<SugarContainDto> recordSugarContains = new ArrayList<>();
+            if(!sugarContains.isEmpty()){
+                for(SugarContain sugarContain : sugarContains){
+                    String sugarName = sugarContain.getSugarId().getSugarNameKR();
+                    Float gram = sugarContain.getGram() * recordCount;
+                    SugarContainDto sugarContainDto = new SugarContainDto();
+                    sugarContainDto.setSugarName(sugarName);
+                    sugarContainDto.setGram(gram);
+                    recordSugarContains.add(sugarContainDto);
+                }
+                recordAllDto.setSugarContains(recordSugarContains);
+            }
+            recordAllDtos.add(recordAllDto);
+        }
+        return recordAllDtos;
     }
 
 }
